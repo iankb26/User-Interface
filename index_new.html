@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJI Robotics - Battery Management Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-icon home-icon active" id="homeIcon" title="Home">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon manual-icon" id="manualIcon" title="Operator Mode">
+                <!-- Hard hat with gear icon -->
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3C7.03 3 3 7.03 3 12h3c0-3.31 2.69-6 6-6s6 2.69 6 6h3c0-4.97-4.03-9-9-9z"/>
+                    <path d="M12 5c-3.87 0-7 3.13-7 7v7h14v-7c0-3.87-3.13-7-7-7zm-3 11c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                </svg>
+            </div>
+        </aside>
+
+        <header class="header">
+            <div class="header-content">
+                <h1>Battery Management Hub</h1>
+                <div class="logo-container">
+                    <div class="text-logo">AJI ROBOTICS</div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div id="homePage" class="page active">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <!-- Battery Status Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Battery Status</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="batteries-container">
+                                <div class="battery-circle-container">
+                                    <div class="battery-name">AGV</div>
+                                    <div class="battery-circle">
+                                        <svg width="180" height="180" viewBox="0 0 180 180">
+                                            <circle class="battery-circle-bg" cx="90" cy="90" r="80"></circle>
+                                            <circle class="battery-circle-progress" cx="90" cy="90" r="80" id="batteryCircle"></circle>
+                                        </svg>
+                                        <div class="battery-percentage" id="batteryPercentage">0%</div>
+                                        <div class="battery-label">Battery 1</div>
+                                    </div>
+                                </div>
+
+                                <div class="battery-circle-container">
+                                    <div class="battery-name">BMH</div>
+                                    <div class="battery-circle">
+                                        <svg width="180" height="180" viewBox="0 0 180 180">
+                                            <circle class="battery-circle-bg" cx="90" cy="90" r="80"></circle>
+                                            <circle class="battery-circle-progress battery-full" cx="90" cy="90" r="80" id="battery2Circle"></circle>
+                                        </svg>
+                                        <div class="battery-percentage" id="battery2Percentage">100%</div>
+                                        <div class="battery-label">Battery 2</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="battery-info">
+                                <div class="info-item">
+                                    <div class="label">Battery Type</div>
+                                    <div class="value" id="batteryType">--</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">Voltage</div>
+                                    <div class="value" id="batteryVoltage">--</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">Status</div>
+                                    <div class="value" id="batteryStatus">--</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">Health</div>
+                                    <div class="value" id="batteryHealth">--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controls Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Controls</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="controls">
+                                <button class="btn btn-success" id="startSwapButton" onclick="startBatterySwap()">Start Battery Swap</button>
+                                <button class="btn" id="resetButton" onclick="resetSystem()">Reset</button>
+                                <button class="btn btn-danger" id="emergencyStopButton" onclick="handleEmergencyStop()" disabled>EMERGENCY STOP</button>
+                            </div>
+                            <div class="console" id="console">
+                                <div class="console-line">
+                                    <span class="console-time">00:00:00</span>
+                                    <span class="console-message">System initialized</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- Charging Graph Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Charging Graph</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="graph-container">
+                                <div class="graph-y-axis">
+                                    <span>100%</span>
+                                    <span>75%</span>
+                                    <span>50%</span>
+                                    <span>25%</span>
+                                    <span>0%</span>
+                                </div>
+                                <canvas id="chargingGraph" class="graph-canvas"></canvas>
+                                <div class="graph-x-axis">
+                                    <span>0s</span>
+                                    <span>30s</span>
+                                    <span>60s</span>
+                                    <span>90s</span>
+                                    <span>120s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Info Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>System Information</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="feedbackArea" class="info-item">
+                                <div class="label">Status</div>
+                                <div class="value">Awaiting Action...</div>
+                            </div>
+                            <div class="battery-info">
+                                <div class="info-item">
+                                    <div class="label">Swap Station</div>
+                                    <div class="value">Station #1</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">Last Swap</div>
+                                    <div class="value" id="lastSwap">Never</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">Total Swaps</div>
+                                    <div class="value" id="totalSwaps">0</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="label">System Uptime</div>
+                                    <div class="value" id="uptime">00:00:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operator Mode Page -->
+            <div id="operatorPage" class="page">
+                <div class="operator-mode">
+                    <h2>Operator Mode</h2>
+                    <p>This page is currently under development.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>AJI Robotics Battery Management Hub v1.0 | &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script src="battery-swap.js"></script>
+    <script src="navigation.js"></script>
+</body>
+</html>
